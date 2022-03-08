@@ -20,8 +20,8 @@ public class CreateDemo {
     Session session = sessionFactory.getCurrentSession();
 
     try {
-      Instructor instructor = new Instructor("Amaka", "Enu", "enuamaka@gmail.com");
-      InstructorDetail instructorDetail = new InstructorDetail("www.youtube.com/amaka", "Nursing");
+      Instructor instructor = new Instructor("Richard", "Enu", "enuazubike@gmail.com");
+      InstructorDetail instructorDetail = new InstructorDetail("www.youtube.com/azubike", "Coding");
       instructor.setInstructorDetail(instructorDetail);
 
       System.out.println("----------Saving Instructor and Instructor detail to the database");
