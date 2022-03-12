@@ -1,4 +1,4 @@
-package com.azubike.ellipsis.hibernate.demo.one_to_many_bi;
+package com.azubike.ellipsis.hibernate.demo.eager_vs_lazy;
 
 import com.azubike.ellipsis.hibernate.demo.entity.Course;
 import com.azubike.ellipsis.hibernate.demo.entity.Instructor;
@@ -6,11 +6,11 @@ import com.azubike.ellipsis.hibernate.demo.entity.InstructorDetail;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.query.Query;
 
-import java.util.List;
 import java.util.Optional;
 
-public class CreateCoursesDemo {
+public class FetchJoinDemo {
   private static final String MESSAGE = "ID NOT FOUND IN THE DATABASE";
 
   public static void main(String[] args) {
@@ -25,26 +25,25 @@ public class CreateCoursesDemo {
     Session session = sessionFactory.getCurrentSession();
 
     try {
-      int instructorId = 9;
 
       session.beginTransaction();
-      final Instructor instructor =
-          Optional.ofNullable(session.get(Instructor.class, instructorId))
-              .orElseThrow(() -> new RuntimeException(MESSAGE));
+      final Instructor instructor = session.createQuery("SELECT i from Instructor  i  " +
+              "JOIN FETCH  i.courses " +
+              "WHERE i.id = :instructorId", Instructor.class).setParameter("instructorId", 9).getSingleResult();
 
-      final Course course = new Course("The Nodejs Api Masterclass");
-      instructor.addCourse(course);
-
-      // This saves the courses
-      session.save(course);
       session.getTransaction().commit();
+
+      session.close();
+
+      System.out.println("The instructor is " + instructor);
+      System.out.println("The courses are " + instructor.getCourses());
 
       System.out.println("------------DONE----------------------");
 
     } catch (Exception ex) {
       ex.printStackTrace();
-      //System.out.println(ex.getMessage());
     } finally {
+      session.close();
       sessionFactory.close();
     }
   }

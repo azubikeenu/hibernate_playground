@@ -1,4 +1,4 @@
-package com.azubike.ellipsis.hibernate.demo.one_to_many_bi;
+package com.azubike.ellipsis.hibernate.demo.eager_vs_lazy;
 
 import com.azubike.ellipsis.hibernate.demo.entity.Course;
 import com.azubike.ellipsis.hibernate.demo.entity.Instructor;
@@ -7,10 +7,9 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-import java.util.List;
 import java.util.Optional;
 
-public class CreateCoursesDemo {
+public class EagerLazyDemo {
   private static final String MESSAGE = "ID NOT FOUND IN THE DATABASE";
 
   public static void main(String[] args) {
@@ -32,19 +31,22 @@ public class CreateCoursesDemo {
           Optional.ofNullable(session.get(Instructor.class, instructorId))
               .orElseThrow(() -> new RuntimeException(MESSAGE));
 
-      final Course course = new Course("The Nodejs Api Masterclass");
-      instructor.addCourse(course);
+      System.out.println("The found instructor is " + instructor);
 
-      // This saves the courses
-      session.save(course);
+      System.out.println("The courses for the given instructor is " + instructor.getCourses());
+
       session.getTransaction().commit();
+
+      session.close();
+
+      System.out.println("The courses for the given instructor is " + instructor.getCourses());
 
       System.out.println("------------DONE----------------------");
 
     } catch (Exception ex) {
       ex.printStackTrace();
-      //System.out.println(ex.getMessage());
     } finally {
+      session.close();
       sessionFactory.close();
     }
   }
