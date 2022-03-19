@@ -3,7 +3,9 @@ package com.azubike.ellipsis.hibernate.demo.entity;
 import com.azubike.ellipsis.hibernate.demo.DateUtils;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Entity
@@ -19,6 +21,13 @@ public class Student {
   @Column
   @Temporal(TemporalType.DATE)
   private Date dateOfBirth;
+
+  @ManyToMany(fetch = FetchType.LAZY)
+  @JoinTable(
+      name = "course_student",
+      joinColumns = @JoinColumn(name = "student_id"),
+      inverseJoinColumns = @JoinColumn(name = "course_id"))
+  private List<Course> courses;
 
   public Student() {}
 
@@ -75,6 +84,21 @@ public class Student {
     this.dateOfBirth = dateOfBirth;
   }
 
+  public List<Course> getCourses() {
+    return courses;
+  }
+
+  public void setCourses(List<Course> courses) {
+    this.courses = courses;
+  }
+
+  public void addCourse(Course course) {
+    if (courses == null) {
+      courses = new ArrayList<>();
+    }
+    courses.add(course);
+  }
+
   @Override
   public String toString() {
 
@@ -89,7 +113,8 @@ public class Student {
         + '\''
         + ", email='"
         + email
-        + '\''+ ", dateOfBirth='"
+        + '\''
+        + ", dateOfBirth='"
         + DateUtils.formatDate(dateOfBirth)
         + '\''
         + '}';

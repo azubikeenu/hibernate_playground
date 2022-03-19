@@ -3,6 +3,7 @@ package com.azubike.ellipsis.hibernate.demo.entity;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Entity
 public class Course {
@@ -23,6 +24,13 @@ public class Course {
   @JoinColumn(name = "course_id")
   private List<Review> reviews;
 
+  @ManyToMany(fetch = FetchType.LAZY)
+  @JoinTable(
+      name = "course_student",
+      joinColumns = @JoinColumn(name = "course_id"),
+      inverseJoinColumns = @JoinColumn(name = "student_id"))
+  private List<Student> students;
+
   public Course() {}
 
   public Course(String title) {
@@ -34,7 +42,6 @@ public class Course {
       reviews = new ArrayList<>();
     }
     reviews.add(review);
-
   }
 
   public int getId() {
@@ -67,6 +74,21 @@ public class Course {
 
   public void setReviews(List<Review> reviews) {
     this.reviews = reviews;
+  }
+
+  public List<Student> getStudents() {
+    return students;
+  }
+
+  public void setStudents(List<Student> students) {
+    this.students = students;
+  }
+
+  public void addStudent(Student student) {
+    if (students == null) {
+      students = new ArrayList<>();
+    }
+    students.add(student);
   }
 
   @Override
