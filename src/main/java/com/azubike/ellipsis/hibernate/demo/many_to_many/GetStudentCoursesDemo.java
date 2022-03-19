@@ -33,7 +33,7 @@ public class GetStudentCoursesDemo {
 
       Student student =
           Optional.ofNullable(session.get(Student.class, studentId))
-              .orElseThrow(() -> new RuntimeException("No student found with ID" + studentId));
+              .orElseThrow(() -> new RuntimeException(MESSAGE));
 
       student.getCourses().forEach(System.out::println);
 

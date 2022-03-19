@@ -37,7 +37,7 @@ public class CreateCourseAndStudentsDemo {
               new Course("Introduction to Go Programming language"));
       Student student =
           Optional.ofNullable(session.get(Student.class, studentId))
-              .orElseThrow(() -> new RuntimeException("No student found with ID" + studentId));
+              .orElseThrow(() -> new RuntimeException(MESSAGE));
 
 
       //save the courses ;

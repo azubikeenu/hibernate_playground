@@ -32,7 +32,7 @@ public class DeleteCourseDemo {
 
       Course course =
           Optional.ofNullable(session.get(Course.class, courseId))
-              .orElseThrow(() -> new RuntimeException("No course found with ID" + courseId));
+              .orElseThrow(() -> new RuntimeException(MESSAGE));
 
       session.delete(course);
 
